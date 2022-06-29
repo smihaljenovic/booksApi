@@ -1,0 +1,59 @@
+version: '3.8'
+
+volumes:
+  mysql_volume:
+  books_api_volume:
+
+networks:
+  books_api_network:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8.0.29
+    container_name: mysql
+    command: --log_bin_trust_function_creators=1 --default-authentication-plugin=mysql_native_password --secure-file-priv=''
+    networks:
+      - books_api_network
+    volumes:
+      - mysql_volume:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=books
+      - MYSQL_PASSWORD=books
+      - MYSQL_DATABASE=books_collection
+    ports:
+      - 3306:3306
+
+  books_api:
+    container_name: books_api
+    restart: always
+    build:
+      context: ./booksApi
+      target: dependencies
+    ports:
+      - ${PORT}:${PORT}
+      - 9229:9229
+    env_file:
+      - .env
+    volumes:
+      - ./booksApi:/home/node/app/booksApi
+    command: dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"
+    networks:
+      - books_api_network
+    depends_on:
+      - mysql
+    environment:
+      PORT: ${PORT}
+      HOST: ${HOST}
+      NODE_ENV: ${NODE_ENV}
+      APP_KEY: ${APP_KEY}
+      DRIVE_DISK: ${DRIVE_DISK}
+      DB_CONNECTION: ${DB_CONNECTION}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DB_NAME: ${MYSQL_DB_NAME}
+      HASH_DRIVER: ${HASH_DRIVER}
+      MYSQL_HOST: mysql
