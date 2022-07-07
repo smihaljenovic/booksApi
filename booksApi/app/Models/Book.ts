@@ -17,6 +17,6 @@ export default class Book extends BaseModel {
   @column()
   public publisher: string
 
-  @column()
-  public authorId: number
+  @column({ columnName: 'author_id' })
+  public authorID: number
 }

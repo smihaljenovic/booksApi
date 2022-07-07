@@ -29,8 +29,6 @@ export class BooksEditComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('.... submiting form');
-    console.log('Edit mode: ', this.editMode);
     if (this.editMode) {
       this.booksService.updateBook(this.id, this.bookForm.value);
     } else {
@@ -46,21 +44,19 @@ export class BooksEditComponent implements OnInit {
   private initForm() {
     let title: string | undefined;
     let publisher: string | undefined;
-    let authorId: number | undefined;
-    console.log('... initialise book form');
+    let authorID: number | undefined = this.authorID;
+
     if (this.editMode) {
-      console.log('.... editing mode');
       const book = this.booksService.getBook(this.id);
-      console.log(book);
       title = book?.title;
       publisher = book?.publisher;
-      authorId = book?.author_id;
+      authorID = book?.author_id;
     }
 
     this.bookForm = new FormGroup({
       title: new FormControl(title, Validators.required),
       publisher: new FormControl(publisher),
-      authorID: new FormControl(authorId),
+      authorID: new FormControl(authorID),
     });
   }
 }
