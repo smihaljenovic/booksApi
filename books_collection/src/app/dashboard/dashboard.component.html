@@ -1,0 +1,17 @@
+<!-- Header -->
+<div class="d-flex justify-content-between border-bottom"
+     style="background-color: #1976d2; color: white">
+  <h4 class="p-2">Booking collection</h4>
+  <div class="p-2">
+    <p>{{loggedUser.firstName}} {{loggedUser.lastName}}</p>
+    <button type="button"
+            class="btn btn-primary"
+            (click)="onLogout()">Logout</button>
+  </div>
+</div>
+
+<!-- Main content -->
+<div class="d-flex justify-content-evenly" style="margin-top: 50px">
+  <app-authors></app-authors>
+  <router-outlet></router-outlet>
+</div>

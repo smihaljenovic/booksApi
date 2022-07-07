@@ -28,7 +28,7 @@ export default class BookValidator {
       rules.maxLength(100)
     ]),
     publisher: schema.string.optional(),
-    authorId: schema.number()
+    authorID: schema.number()
   })
 
   /**

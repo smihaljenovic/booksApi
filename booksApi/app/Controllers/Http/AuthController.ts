@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import User from 'App/Models/User'
 
 export default class AuthController {
   /**
@@ -16,7 +17,8 @@ export default class AuthController {
     try {
       // check credentials and generate token
       const token = await auth.use('api').attempt(email, password, { expiresIn: '30mins' })
-      return token
+      const user = await User.findBy('email', email)
+      return { token, user }
     } catch (e) {
       return response.unauthorized({error: 'Invalid credentials'})
     }

@@ -16,14 +16,7 @@ export default class UsersController {
     const page = request.input('page') || 1   // set default page number
     const limit = request.input('limit') || 5   // set default no of records
 
-    let users
-    if (loggedUser.role === 'ROLE_AUTHOR') {
-      // authors can see only themselves
-      users = await User.query().where('id', loggedUser.id).paginate(page, limit)
-    } else {
-      // admins can see all users
-      users = await User.query().paginate(page, limit)
-    }
+    let users = await User.query().paginate(page, limit)  // get users
 
     return users.serialize()
   }
@@ -37,10 +30,8 @@ export default class UsersController {
   public async show({ params, auth }: HttpContextContract) {
     // @ts-ignore
     const loggedUser = auth.user.toJSON()   // get logged user data
-    // authors can see only themselves
-    const userID = loggedUser.role === 'ROLE_AUTHOR' ? loggedUser.id : params.id
 
-    return {data: await User.find(userID)}
+    return {data: await User.find(params.id)}
   }
 
   /**
@@ -54,9 +45,10 @@ export default class UsersController {
    * @returns {string} Message 'New user added'
    */
   public async create({ request, response }: HttpContextContract) {
+    let user;
     try {
       await request.validate(UserValidator)    // first validate params
-      await User.create(request.body())   // create user
+      user = await User.create(request.body())   // create user
     } catch (error) {
       let errorMessage = ''
       if (error.code === 'ER_DUP_ENTRY') {
@@ -69,7 +61,10 @@ export default class UsersController {
       return response.status(400).send({error: errorMessage})
     }
 
-    return {message: 'New user added'}
+    return {
+      data: user,
+      message: 'New user added'
+    }
   }
 
   /**

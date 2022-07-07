@@ -1,0 +1,35 @@
+<div class="p-2">
+  <h4 class="mb-3">Book</h4>
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-xs-12">
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="!bookForm.valid">Save</button>
+        <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="col-md-6 mb-3">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" formControlName="title" placeholder="" value="" required>
+        <div class="invalid-feedback">
+          Valid title is required.
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="col-md-6 mb-3">
+        <label for="publisher">Publisher</label>
+        <input type="text" class="form-control" id="publisher" formControlName="publisher" placeholder="" value="">
+      </div>
+    </div>
+    <div class="mb-3 hiding">
+      <div class="col-md-6 mb-3">
+        <label for="publisher">Author</label>
+        <input type="text" class="form-control" id="authorId" formControlName="authorId" placeholder="" value="{{authorID}}">
+      </div>
+    </div>
+  </form>
+</div>
