@@ -19,3 +19,7 @@ This is **required** to be able to use application.
 ### Run tests
 It is recommended to run tests on empty database. Tests can be run inside docker instance, inside booksApi folder.
 Run command `node ace test unit`.
+
+
+### Frontend
+Frontend is accessible over localhost:2200 route. Credentials for main admin user are admin@books.com with password Admin22*.

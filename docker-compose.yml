@@ -3,6 +3,7 @@ version: '3.8'
 volumes:
   mysql_volume:
   books_api_volume:
+  books_collection:
 
 networks:
   books_api_network:
@@ -57,3 +58,14 @@ services:
       MYSQL_DB_NAME: ${MYSQL_DB_NAME}
       HASH_DRIVER: ${HASH_DRIVER}
       MYSQL_HOST: mysql
+
+  books_collection:
+    container_name: books_collection
+    build:
+      context: ./books_collection
+      dockerfile: Dockerfile
+    ports:
+      - "2200:2200"
+    volumes:
+      - ./books_collection:/usr/src/app/
+      - /usr/src/app/books_collection/node_modules
